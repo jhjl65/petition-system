@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Петиції Києва</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="container">
+    <h1>Електронні петиції</h1>
+    <header class="navbar">
+        <div class="nav-container">
+            <a class="nav-logo" th:href="@{/petitions}">Петиції Києва</a>
+
+            <div class="nav-links">
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/petitions/create}" class="nav-btn">Створити петицію</a>
+                    <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="nav-btn logout">Вийти</button>
+                    </form>
+                </div>
+
+                <div sec:authorize="isAnonymous()">
+                    <a th:href="@{/auth/login}" class="nav-btn">Увійти</a>
+                    <a th:href="@{/auth/register}" class="nav-btn">Реєстрація</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="petition-controls">
+        <form th:action="@{/petitions}" method="get">
+            <select name="status" onchange="this.form.submit()">
+                <option th:value="all" th:selected="${filter == 'all'}">Усі</option>
+                <option th:value="active" th:selected="${filter == 'active'}">Активні</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="petition-grid">
+        <div class="petition-card" th:each="petition : ${petitions}">
+            <div class="petition-img">
+                <img th:if="${petition.imageData}" th:src="@{/petitions/{id}/image(id=${petition.id})}" alt="Зображення">
+                <div th:if="${petition.imageData == null}" class="no-image">📄</div>
+            </div>
+
+            <div class="petition-info">
+                <h3>
+                    <a th:href="@{/petitions/{id}(id=${petition.id})}" th:text="${petition.title}"></a>
+                </h3>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill"
+                             th:style="'width:' + (${#lists.size(petition.votes)} * 100 / ${petition.maxVotes}) + '%'">
+                        </div>
+                    </div>
+                    <small>
+                        <span th:text="${#lists.size(petition.votes)}"></span> / <span th:text="${petition.maxVotes}"></span> голосів
+                    </small>
+                </div>
+
+                <p class="deadline">
+                    Залишилось:
+                    <span th:if="${T(java.time.LocalDateTime).now().isBefore(petition.deadline.atStartOfDay())}"
+                          th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDateTime).now(), petition.deadline.atStartOfDay())} + ' дн.'"></span>
+                    <span th:if="${T(java.time.LocalDateTime).now().isAfter(petition.deadline.atStartOfDay()) and T(java.time.LocalDateTime).now().isBefore(petition.deadline.atStartOfDay().plusHours(24))}"
+                          th:text="${T(java.time.temporal.ChronoUnit).HOURS.between(T(java.time.LocalDateTime).now(), petition.deadline.atStartOfDay().plusHours(24))} + ' год.'"></span>
+                </p>
+
+                <p th:if="${#lists.size(petition.votes) >= petition.maxVotes or T(java.time.LocalDate).now().isAfter(petition.deadline)}"
+                   class="status-ended">ЗАВЕРШЕНО</p>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

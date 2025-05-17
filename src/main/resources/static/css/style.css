@@ -1,0 +1,651 @@
+/* ===== Глобальні змінні та стилі ===== */
+:root {
+    --primary-blue: #0057B8;
+    --secondary-yellow: #FFD700;
+    --light-gray: #F5F5F5;
+    --dark-gray: #333333;
+    --white: #FFFFFF;
+    --red: #D32F2F;
+    --green: #4CAF50;
+    --orange: #FF9800;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* ===== Фоновий шаблон із гербом Києва ===== */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    line-height: 1.6;
+    font-size: 16px;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0.05;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Kiew-city-COA.PNG/250px-Kiew-city-COA.PNG');
+    background-repeat: repeat;
+    background-size: 100px 120px;
+    pointer-events: none;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: #003D82;
+    text-decoration: underline;
+}
+
+/* ===== Основні стилі контейнера ===== */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+}
+
+h1, h2, h3, h4 {
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 28px;
+    border-bottom: 2px solid var(--secondary-yellow);
+    padding-bottom: 10px;
+}
+
+/* ===== Навігаційна панель із логотипом герба Києва ===== */
+.navbar {
+    background-color: var(--primary-blue);
+    padding: 15px 0;
+    color: var(--white);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-logo::before {
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Kiew-city-COA.PNG/250px-Kiew-city-COA.PNG');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    color: var(--white);
+    background-color: transparent;
+    border: 1px solid var(--white);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+}
+
+.nav-btn.logout {
+    background-color: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+/* ===== Сторінки авторизації ===== */
+.auth-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 40px;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-blue);
+    font-size: 24px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.auth-form input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.2);
+}
+
+.auth-form button[type="submit"] {
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.login-container .auth-form button[type="submit"] {
+    background-color: var(--green);
+}
+
+.login-container .auth-form button[type="submit"]:hover {
+    background-color: #3e8e41;
+}
+
+.register-container .auth-form button[type="submit"] {
+    background-color: var(--primary-blue);
+}
+
+.register-container .auth-form button[type="submit"]:hover {
+    background-color: #0047A0;
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 15px;
+}
+
+.auth-links a {
+    color: var(--primary-blue);
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Сітка петицій ===== */
+.petition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.petition-card {
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.petition-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.petition-img img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.petition-img .no-image {
+    width: 100%;
+    height: 180px;
+    background: #e9e9e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 50px;
+}
+
+.petition-info {
+    padding: 20px;
+}
+
+.petition-info h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}
+
+.petition-info h3 a {
+    color: var(--primary-blue);
+}
+
+/* ===== Прогрес бар ===== */
+.progress-container {
+    margin: 15px 0;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.progress-percent {
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+.progress-bar {
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-blue), #0077E6);
+    transition: width 0.5s ease;
+}
+
+/* ===== Сторінка деталей петиції ===== */
+.petition-detail {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+}
+
+.petition-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--secondary-yellow);
+    padding-bottom: 15px;
+}
+
+.petition-meta {
+    display: flex;
+    gap: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.petition-meta i {
+    margin-right: 5px;
+    color: var(--primary-blue);
+}
+
+.petition-image {
+    margin-bottom: 25px;
+}
+
+.petition-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.petition-description {
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.petition-stats {
+    background: var(--light-gray);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.btn-vote {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-vote:hover {
+    background-color: #0047A0;
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.share-section, .creator-actions {
+    background: var(--light-gray);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.share-section h3, .creator-actions h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.share-buttons, .action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Оновлені стилі для прихованого поля посилання */
+#voteLink {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.btn-copy, .btn-open, .btn-edit, .btn-delete, .btn-back {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.btn-copy {
+    background-color: var(--green);
+    color: white;
+}
+
+.btn-copy:hover {
+    background-color: #3e8e41;
+}
+
+.btn-open {
+    background-color: #2196F3;
+    color: white;
+}
+
+.btn-open:hover {
+    background-color: #0b7dda;
+}
+
+.btn-edit {
+    background-color: var(--orange);
+    color: #333;
+}
+
+.btn-edit:hover {
+    background-color: #e68a00;
+}
+
+.btn-delete {
+    background-color: var(--red);
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #b71c1c;
+}
+
+.back-link {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.btn-back {
+    color: var(--primary-blue);
+    font-weight: 500;
+    background-color: transparent;
+}
+
+.btn-back:hover {
+    background-color: #f0f0f0;
+    text-decoration: none;
+}
+
+/* ===== Форми ===== */
+.form-box {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+label {
+    display: block;
+    margin: 15px 0 8px;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background-color: #0047A0;
+}
+
+.btn-secondary {
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    padding: 12px 24px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+/* ===== Алерти та повідомлення ===== */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    border-left: 4px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-error {
+    background-color: #FFEBEE;
+    color: var(--red);
+    border-left-color: var(--red);
+}
+
+.alert-success {
+    background-color: #E8F5E9;
+    color: var(--green);
+    border-left-color: var(--green);
+}
+
+/* ===== Адаптивність ===== */
+@media (max-width: 768px) {
+    .container, .petition-detail, .auth-container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .nav-links {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .petition-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions, .share-buttons, .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn-primary, .btn-secondary,
+    .btn-copy, .btn-open,
+    .btn-edit, .btn-delete,
+    .auth-form button[type="submit"] {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .petition-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .auth-container {
+        padding: 30px 15px;
+    }
+}

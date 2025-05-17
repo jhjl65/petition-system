@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${petition.title}">Петиція</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-container">
+        <a class="nav-logo" th:href="@{/petitions}">Петиції Києва</a>
+        <div class="nav-links">
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/petitions/create}" class="nav-btn">Створити петицію</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="nav-btn logout">Вийти</button>
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/auth/login}" class="nav-btn">Увійти</a>
+                <a th:href="@{/auth/register}" class="nav-btn">Реєстрація</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container petition-detail">
+    <div class="petition-header">
+        <h1 th:text="${petition.title}">Петиція</h1>
+        <div class="petition-meta">
+            <span class="deadline">
+                <i class="far fa-calendar-alt"></i>
+                Завершення: <span th:text="${#temporals.format(petition.deadline, 'dd.MM.yyyy')}"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="petition-content">
+        <div th:if="${petition.imageData}" class="petition-image">
+            <img th:src="@{/petitions/{id}/image(id=${petition.id})}" alt="Зображення петиції">
+        </div>
+
+        <div class="petition-description">
+            <p th:text="${petition.description}">Опис</p>
+        </div>
+
+        <div class="petition-stats">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span>Голосів: <strong th:text="${#lists.size(petition.votes)}">0</strong>/<span th:text="${petition.maxVotes}">0</span></span>
+                    <span class="progress-percent"
+                          th:text="${petition.maxVotes > 0 ?
+                                   #numbers.formatDecimal(#lists.size(petition.votes) * 100 / petition.maxVotes, 1, 1) + '%' : '0%'}">
+                    </span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"
+                         th:style="${'width:' + (petition.maxVotes > 0 ?
+                                   T(java.lang.Math).min(100, (#lists.size(petition.votes) * 100) / petition.maxVotes) : 0) + '%'}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="vote-section" sec:authorize="isAuthenticated()">
+                <form th:action="@{/vote/{id}(id=${petition.id})}" method="post">
+                    <button type="submit" class="btn-vote">
+                        <i class="fas fa-vote-yea"></i> Проголосувати
+                    </button>
+                </form>
+            </div>
+
+            <div class="login-prompt" sec:authorize="isAnonymous()">
+                <p>Щоб проголосувати, будь ласка, <a th:href="@{/auth/login}">увійдіть</a>.</p>
+            </div>
+        </div>
+
+        <div class="share-section">
+            <h3><i class="fas fa-share-alt"></i> Поширити петицію</h3>
+            <div class="share-buttons">
+                <input type="text" id="voteLink" th:value="@{|${baseUrl}/vote/token/${petition.voteToken}|}" readonly>
+
+                <button onclick="copyLink(event)" class="btn-copy">
+                    <i class="far fa-copy"></i> Скопіювати посилання
+                </button>
+                <a th:href="@{/vote/token/{token}(token=${petition.voteToken})}" target="_blank" class="btn-open">
+                    <i class="fas fa-external-link-alt"></i> Відкрити
+                </a>
+            </div>
+        </div>
+
+        <div class="creator-actions" th:if="${isCreator}">
+            <h3><i class="fas fa-cog"></i> Керування петицією</h3>
+            <div class="action-buttons">
+                <a th:href="@{/petitions/edit/{id}(id=${petition.id})}" class="btn-edit">
+                    <i class="far fa-edit"></i> Редагувати
+                </a>
+                <form th:action="@{/petitions/delete/{id}(id=${petition.id})}" method="post">
+                    <button type="submit" class="btn-delete">
+                        <i class="far fa-trash-alt"></i> Видалити
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a th:href="@{/petitions}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Назад до списку петицій
+        </a>
+    </div>
+</main>
+
+<script>
+    function copyLink(event) {
+        const inp = document.getElementById('voteLink');
+
+        // Перевірка на підтримку Clipboard API
+        if (!navigator.clipboard) {
+            alert('Ваш браузер не підтримує копіювання через Clipboard API');
+            return;
+        }
+
+        navigator.clipboard.writeText(inp.value).then(() => {
+            const copyBtn = event.target.closest('.btn-copy');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопійовано!';
+            copyBtn.style.backgroundColor = '#4CAF50';
+
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.style.backgroundColor = '';
+            }, 2000);
+        }).catch(err => {
+            console.error('Не вдалося скопіювати: ', err);
+            alert('Не вдалося скопіювати посилання');
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Створити петицію</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-container">
+        <a class="nav-logo" th:href="@{/petitions}">Петиції Києва</a>
+        <div class="nav-links">
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/petitions/create}" class="nav-btn">Створити петицію</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="nav-btn logout">Вийти</button>
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/auth/login}" class="nav-btn">Увійти</a>
+                <a th:href="@{/auth/register}" class="nav-btn">Реєстрація</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <h1>Створення нової петиції</h1>
+
+    <form th:action="@{/petitions/create}" method="post" enctype="multipart/form-data" class="form-box">
+        <label for="title">Назва петиції</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="description">Опис</label>
+        <textarea id="description" name="description" rows="6" required></textarea>
+
+        <label for="maxVotes">Максимальна кількість голосів</label>
+        <input type="number" id="maxVotes" name="maxVotes" min="1" value="100" required>
+
+        <label for="deadline">Дата завершення</label>
+        <input type="date" id="deadline" name="deadline" required>
+
+        <label for="image">Зображення (необов'язково)</label>
+        <input type="file" id="image" name="image" accept="image/*">
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Створити петицію</button>
+            <a th:href="@{/petitions}" class="btn-secondary">Скасувати</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
